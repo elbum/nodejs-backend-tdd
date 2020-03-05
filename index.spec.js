@@ -105,3 +105,70 @@ describe("POST /", () => {
     body.should.have.property("name", name);
   });
 });
+
+describe("POST 실패", () => {
+  it("name 파라미터 누락시 400을 반환한다", done => {
+    request(app)
+      .post("/users")
+      .send({})
+      .expect(400)
+      .end(done);
+  });
+
+  it("name 중복이면 409을 반환한다", done => {
+    request(app)
+      .post("/users")
+      .send({ name: "happy" })
+      .expect(409)
+      .end(done);
+  });
+});
+
+describe("PUT /", () => {
+  describe("성공시", () => {
+    it("put성공시 변경된 name을 반환한다.", done => {
+      const name = "charlie";
+
+      request(app)
+        .put("/users/3")
+        .send({ name })
+        .end((err, res) => {
+          res.body.should.have.property("name", name);
+          done();
+        });
+    });
+
+    // it("name 중복이면 409을 반환한다", done => {
+    //   request(app)
+    //     .post("/users")
+    //     .send({ name: "happy" })
+    //     .expect(409)
+    //     .end(done);
+    // });
+    //   });
+
+    describe("실패시", () => {
+      it("id 가 정수가 아닐때 400", done => {
+        request(app)
+          .put("/users/one")
+          .expect(400)
+          .end(done);
+      });
+      it("name 없을때 404 반환한다", done => {
+        request(app)
+          .put("/users/1")
+          //   .send({ name: "dummy" })
+          .expect(404)
+          .end(done);
+      });
+
+      it("중복일때 409 반환한다", done => {
+        request(app)
+          .put("/users/3")
+          .send({ name: "charlie" })
+          .expect(409)
+          .end(done);
+      });
+    });
+  });
+});
