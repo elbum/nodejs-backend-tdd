@@ -4,14 +4,16 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "test": "mocha index.spec.js"
+    "start": "node bin/www.js",
+    "test": "set NODE_ENV=test&mocha api/user/user.spec.js -w"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.17.1",
-    "morgan": "^1.9.1"
+    "morgan": "^1.9.1",
+    "sequelize": "^5.21.5",
+    "sqlite3": "^4.1.1"
   },
   "devDependencies": {
     "body-parser": "^1.19.0",
